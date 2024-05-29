@@ -1,0 +1,38 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+.Started {
+    color: #4cff00;
+    background: #fff;
+    border: 1px solid #4cff00;
+    border-radius: 5px;
+    padding: 2px;
+}
+
+.Stopped {
+    color: #ff0000;
+    background: #fff;
+    border: 1px solid #ff0000;
+    border-radius: 5px;
+    padding: 2px;
+}
+.btn-dashboard{
+    padding:0;
+    border:none;
+    background:transparent;
+}
