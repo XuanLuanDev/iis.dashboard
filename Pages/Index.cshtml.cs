@@ -2,17 +2,20 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Web.Administration;
+using System;
 
 namespace IIS.Dashboard.Pages
 {
     public class IndexModel : PageModel
     {
+        public const string SessionKeyName = "IISUser";
         private readonly ILogger<IndexModel> _logger;
         public List<Website> Websites { get; set; } =new List<Website>();
         public IndexModel(ILogger<IndexModel> logger)
         {
             _logger = logger;
             this.GetAllSites();
+           
         }
         public void GetAllSites()
         {
@@ -89,9 +92,19 @@ namespace IIS.Dashboard.Pages
         {
 
         }
-        public void OnGet()
+        public IActionResult OnGet()
         {
+            if (!Auth())
+            {
+                return new RedirectToPageResult("/login");
+            }
+            return Page();
 
+        }
+        public bool Auth()
+        {
+            string ss = HttpContext.Session.GetString(SessionKeyName);
+            return   !string.IsNullOrEmpty(ss);
         }
     }
 }
