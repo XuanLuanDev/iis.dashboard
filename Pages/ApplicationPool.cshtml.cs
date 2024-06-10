@@ -1,3 +1,4 @@
+using IIS.Dashboard.Common;
 using IIS.Dashboard.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -11,7 +12,7 @@ namespace IIS.Dashboard.Pages
         public ApplicationPoolModel()
         {
             AppPools = new List<AppPool>();
-            this.GetAllPools();
+           
         }
         public void GetAllPools()
         {
@@ -29,8 +30,20 @@ namespace IIS.Dashboard.Pages
                 }
             }
         }
-        public void OnGet()
+        public IActionResult OnGet()
         {
+            if (!Auth())
+            {
+                return new RedirectToPageResult("/login");
+            }
+            this.GetAllPools();
+            return Page();
+
+        }
+        public bool Auth()
+        {
+            string ss = HttpContext.Session.GetString(StringConst.SessionKeyName);
+            return !string.IsNullOrEmpty(ss);
         }
         public void OnPostStop(string pool)
         {

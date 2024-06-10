@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
 using IIS.Dashboard.Models;
 using System.Data.SqlTypes;
+using IIS.Dashboard.Common;
 
 namespace IIS.Dashboard.Logic
 {
@@ -71,5 +72,6 @@ namespace IIS.Dashboard.Logic
                 throw new Exception ("Password is incorrect.");
             }
         }
+       
     }
 }

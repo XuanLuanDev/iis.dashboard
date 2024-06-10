@@ -1,4 +1,5 @@
-﻿using IIS.Dashboard.Models;
+﻿using IIS.Dashboard.Common;
+using IIS.Dashboard.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Web.Administration;
@@ -8,13 +9,12 @@ namespace IIS.Dashboard.Pages
 {
     public class IndexModel : PageModel
     {
-        public const string SessionKeyName = "IISUser";
         private readonly ILogger<IndexModel> _logger;
         public List<Website> Websites { get; set; } =new List<Website>();
         public IndexModel(ILogger<IndexModel> logger)
         {
             _logger = logger;
-            this.GetAllSites();
+         
            
         }
         public void GetAllSites()
@@ -98,12 +98,13 @@ namespace IIS.Dashboard.Pages
             {
                 return new RedirectToPageResult("/login");
             }
+            this.GetAllSites();
             return Page();
 
         }
         public bool Auth()
         {
-            string ss = HttpContext.Session.GetString(SessionKeyName);
+            string ss = HttpContext.Session.GetString(StringConst.SessionKeyName);
             return   !string.IsNullOrEmpty(ss);
         }
     }
