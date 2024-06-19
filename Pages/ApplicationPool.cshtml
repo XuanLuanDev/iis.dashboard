@@ -3,7 +3,8 @@
 @{
     ViewData["Title"] = "Application Pool - IIS.Dashboard";
 }
-<div class="container">
+@if (Model.IsEditMode == false)
+{
     <div class="container">
         <div class="row">
             <div class="col">
@@ -24,26 +25,26 @@
                 </form>
             </div>
         </div>
-    <div class="row">
-        <div class="col-12">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Name</th>
-                        <th>State</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @for (int i = 0; i < Model.AppPools.Count; i++)
-                    {
+        <div class="row">
+            <div class="col-12">
+                <table class="table table-striped">
+                    <thead>
                         <tr>
-                            <td>@(i + 1)</td>
-                            <td>@Model.AppPools[i].Name</td>
-                            <td><span class="@Model.AppPools[i].State"> @Model.AppPools[i].State</span></td>
-                            <td>
-                                <div class="d-flex">
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>State</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.AppPools.Count; i++)
+                        {
+                            <tr>
+                                <td>@(i + 1)</td>
+                                <td>@Model.AppPools[i].Name</td>
+                                <td><span class="@Model.AppPools[i].State"> @Model.AppPools[i].State</span></td>
+                                <td>
+                                    <div class="d-flex">
                                         @if (Model.AppPools[i].State == "Started")
                                         {
                                             <form asp-page-handler="Stop" method="post">
@@ -74,13 +75,77 @@
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);"><path d="M5 20a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8h2V6h-4V4a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2H3v2h2zM9 4h6v2H9zM8 8h9v12H7V8z"></path><path d="M9 10h2v8H9zm4 0h2v8h-2z"></path></svg>
                                             </button>
                                         </form>
-                                </div>
-                               
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                                    </div>
+
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
+}
+@if (Model.IsEditMode == true)
+{
+    <div class="container">
+         <form  method="post">
+        <div class="row">
+            <div class="col-6">
+                <label>Name <span class="required">*</span></label>
+                    <input type="text" class="form-control" value="@Model.CurrentAppPoolEdit.Name" name="name">
+                    <input type="hidden"  class="form-control" value="@Model.CurrentAppPoolEdit.IsEdit" name="isEdit">
+            </div>
+            <div class="col-6">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" checked="@Model.CurrentAppPoolEdit.Enable32BitAppOnWin64" name="enable32BitAppOnWin64">
+                        <label class="form-check-label">
+                            Enable32BitAppOnWin64
+                        </label>
+                    </div>
+            </div>
+            <div class="col-6">
+                <label>Mode </label>
+               <select class="form-select" name="mode">
+                        @if (Model.CurrentAppPoolEdit.Mode == "Classic")
+                        {
+                            <option value="Classic" selected>Classic</option>
+                            <option value="Integrated" >Integrated</option>
+                        }
+                        @if (Model.CurrentAppPoolEdit.Mode == "Integrated"){
+                        <option value="Classic" >Classic</option>
+                        <option value="Integrated" selected>Integrated</option>
+                        }
+                      
+                    
+               </select>
+            </div>
+                <div class="col-6">
+                    <label>Runtime Version </label>
+                    <select class="form-select" name="runtimeVersion">
+                        @if (Model.CurrentAppPoolEdit.RuntimeVersion == "v2.0")
+                        {
+                            <option value="v2.0" selected>v2.0</option>
+                            <option value="v4.0">v4.0</option>
+                        }
+                        @if (Model.CurrentAppPoolEdit.RuntimeVersion == "v4.0")
+                        {
+                            <option value="v2.0">v2.0</option>
+                            <option value="v4.0" selected>v4.0</option>
+                        }
+
+
+                    </select>
+                </div>
+        </div>
+            <div class="row mgt-10">
+            <div class="col"></div>
+            <div class="col-auto">
+                <button class="btn btn-outline-info" asp-page-handler="Save"> Save</button>
+
+                <button class="btn btn-outline-info" asp-page-handler="Cancel"> Cancel</button>
+            </div>
+        </div>
+        </form>
+    </div>
+}

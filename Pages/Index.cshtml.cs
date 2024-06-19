@@ -11,6 +11,7 @@ namespace IIS.Dashboard.Pages
     {
         private readonly ILogger<IndexModel> _logger;
         public List<Website> Websites { get; set; } =new List<Website>();
+        public bool IsEditMode { get; set; } = false;
         public IndexModel(ILogger<IndexModel> logger)
         {
             _logger = logger;
@@ -80,7 +81,7 @@ namespace IIS.Dashboard.Pages
         }
         public void OnPostAdd()
         {
-           
+            IsEditMode = true;
         }
         public void OnPostEdit()
         {

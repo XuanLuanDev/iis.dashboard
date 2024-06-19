@@ -20,7 +20,7 @@ namespace IIS.Dashboard.Pages
         {
             this.Context = dbContext;
             Accounts = new List<AccountUserModel>();
-            ViewData["Title"] = "Account Manager";
+           
         }
         public bool Auth()
         {
@@ -29,6 +29,7 @@ namespace IIS.Dashboard.Pages
         }
         public IActionResult OnGet()
         {
+            ViewData["Title"] = "Account Manager";
             if (!Auth())
             {
                 return new RedirectToPageResult("/login");

@@ -36,3 +36,9 @@ body {
     border:none;
     background:transparent;
 }
+.required{
+    color:red;
+}
+.mgt-10{
+    margin-top:10px
+}

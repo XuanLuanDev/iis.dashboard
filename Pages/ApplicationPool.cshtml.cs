@@ -3,12 +3,15 @@ using IIS.Dashboard.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Web.Administration;
+using System.Collections.Generic;
 
 namespace IIS.Dashboard.Pages
 {
     public class ApplicationPoolModel : PageModel
     {
         public List<AppPool> AppPools { get; set; } =new List<AppPool>();
+        public bool IsEditMode { get; set; } = false;
+        public AppPoolEdit CurrentAppPoolEdit { get; set; } =new AppPoolEdit();
         public ApplicationPoolModel()
         {
             AppPools = new List<AppPool>();
@@ -81,6 +84,27 @@ namespace IIS.Dashboard.Pages
         }
         public void OnPostAdd()
         {
+            this.CurrentAppPoolEdit = new AppPoolEdit();
+            this.CurrentAppPoolEdit.Enable32BitAppOnWin64 = true;
+            this.CurrentAppPoolEdit.Mode = "Classic";
+            this.CurrentAppPoolEdit.RuntimeVersion = "v4.0";
+            IsEditMode = true;
+        }
+        public void OnPostSave(string name,bool enable32BitAppOnWin64,string mode,string runtimeVersion,bool isEdit)
+        {
+           if(isEdit == false)
+            {
+                using (ServerManager serverManager = new ServerManager())
+                {
+                    ApplicationPool newPool = serverManager.ApplicationPools.Add(name);
+                    newPool.ManagedRuntimeVersion = runtimeVersion;
+                    newPool.Enable32BitAppOnWin64 = enable32BitAppOnWin64;
+                    newPool.ManagedPipelineMode = mode == "Classic"? ManagedPipelineMode.Classic: ManagedPipelineMode.Integrated;
+                    serverManager.CommitChanges();
+                }
+                IsEditMode = false;
+                this.GetAllPools();
+            }
 
         }
         public void OnPostEdit()
@@ -90,6 +114,10 @@ namespace IIS.Dashboard.Pages
         public void OnPostDelete()
         {
 
+        }
+        public void OnPostCancel()
+        {
+            this.IsEditMode = false;
         }
     }
 }
