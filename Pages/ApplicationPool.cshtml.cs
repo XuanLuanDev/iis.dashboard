@@ -12,7 +12,6 @@ namespace IIS.Dashboard.Pages
         public ApplicationPoolModel()
         {
             AppPools = new List<AppPool>();
-           
         }
         public void GetAllPools()
         {
@@ -32,6 +31,7 @@ namespace IIS.Dashboard.Pages
         }
         public IActionResult OnGet()
         {
+            ViewData["Title"] = "Application Pool";
             if (!Auth())
             {
                 return new RedirectToPageResult("/login");

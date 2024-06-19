@@ -14,8 +14,6 @@ namespace IIS.Dashboard.Pages
         public IndexModel(ILogger<IndexModel> logger)
         {
             _logger = logger;
-         
-           
         }
         public void GetAllSites()
         {
@@ -94,6 +92,7 @@ namespace IIS.Dashboard.Pages
         }
         public IActionResult OnGet()
         {
+            ViewData["Title"] = "Website Manager";
             if (!Auth())
             {
                 return new RedirectToPageResult("/login");

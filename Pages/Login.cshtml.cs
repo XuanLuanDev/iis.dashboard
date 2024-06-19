@@ -19,6 +19,7 @@ namespace IIS.Dashboard.Pages
         public string SummaryError { get; set; } = "";
         public void OnGet()
         {
+            ViewData["Title"] = "Login";
         }
         public IActionResult OnPostLogin(string email,string password)
         {
@@ -35,6 +36,7 @@ namespace IIS.Dashboard.Pages
                            ).ToArray();
                 string roleList = roles != null && roles.Length > 0 ? String.Join(",", roles) : "";
                 HttpContext.Session.SetString(StringConst.SessionKeyRole, roleList);
+                HttpContext.Session.SetString(StringConst.LoginUserNameKey, user.Name);
                 return   new RedirectToPageResult("/home");
             }
             catch (Exception ex)
